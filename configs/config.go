@@ -22,7 +22,7 @@ func (c *Configuration) Load(environment string) error {
 	if len(environment) > 0 {
 		path = fmt.Sprintf("%s_%s", environment, path)
 	}
-	f, err := os.Open("configs/config.yml")
+	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}
