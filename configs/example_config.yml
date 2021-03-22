@@ -1,0 +1,4 @@
+---
+business:
+  endpoints:
+    order: https://path.to/order
