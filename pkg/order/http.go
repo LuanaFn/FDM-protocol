@@ -9,7 +9,6 @@ import (
 	"github.com/LuanaFn/FDM-protocol/configs"
 )
 
-//TODO: write readme for this service
 var businessHost string
 
 func create(w http.ResponseWriter, r *http.Request) {
