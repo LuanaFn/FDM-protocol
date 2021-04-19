@@ -14,8 +14,16 @@ func main() {
 	}
 	log.Info.Printf("Running with config: %+v", configs.Config)
 	order.HandleRequests()
-	err = http.ListenAndServe("localhost:8080", nil)
-	if err != nil {
-		log.Error.Panic("error opening order service: ", err)
-	}
+	c := make(chan int)
+	go func() {
+		err := http.ListenAndServe(":8080", nil)
+		if err != nil {
+			log.Error.Fatal(err)
+		}
+
+		c <- 1
+	}()
+
+	log.Debug.Println("Listening on port 8080")
+	log.Debug.Print(<-c)
 }

@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+  backend:
+    image: lurifn/fdm-backend:v0.1.7
+    ports:
+      - "8081:8080"

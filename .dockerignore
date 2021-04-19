@@ -1,0 +1,14 @@
+# app output
+main
+coverage.txt
+
+# git
+.gitignore
+.github
+
+# IDE
+.idea
+
+# docker
+Dockerfile
+.dockerignore
