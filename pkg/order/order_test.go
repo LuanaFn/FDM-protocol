@@ -3,7 +3,6 @@ package order
 import (
 	"bytes"
 	"fmt"
-	"github.com/LuanaFn/FDM-protocol/configs"
 	"github.com/LuanaFn/FDM-protocol/pkg/log"
 	"github.com/cucumber/godog"
 	"io/ioutil"
@@ -17,6 +16,7 @@ var orderReceived = false
 var callbackUrl string
 var externalVendorProducts bool
 var businessMsg = []byte("{\"msg\":\"order was received\"}")
+var ordersHost string
 
 func before(_ *godog.Scenario) {
 	orderServerMock = httptest.NewServer(
@@ -30,13 +30,8 @@ func before(_ *godog.Scenario) {
 		}),
 	)
 	log.Debug.Println("Orders mocked business server up")
-	configs.Config.Business.Endpoints = map[string]string{
-		"order": orderServerMock.URL,
-	}
-	configs.Config.ServiceHost = "http://localhost:8080"
-	log.Debug.Println("Orders mocked business configured")
 
-	HandleRequests()
+	HandleRequests(orderServerMock.URL)
 	go func() {
 		err := http.ListenAndServe("localhost:8080", nil)
 		if err != nil {
@@ -62,7 +57,7 @@ func iDoNotProvideACallbackURL() error {
 
 func iOrderAListOfProductsFromCurrentVendor() error {
 	client := &http.Client{}
-	host := configs.Config.ServiceHost + "/orders"
+	host := "http://localhost:8080/orders"
 	req, err := http.NewRequest("POST", host, nil)
 	if err != nil {
 		return err
@@ -100,7 +95,7 @@ func theOrderIsSentToTheOrderBusinessService() error {
 	if orderReceived {
 		return nil
 	} else {
-		return fmt.Errorf("error: the order was not received by the order business service at \"%s\"", configs.Config.Business.Endpoints["order"])
+		return fmt.Errorf("error: the order was not received by the order business service at \"%s\"", ordersHost)
 	}
 }
 
