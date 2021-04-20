@@ -1,20 +1,23 @@
 package main
 
 import (
-	"github.com/LuanaFn/FDM-protocol/configs"
 	"github.com/LuanaFn/FDM-protocol/pkg/log"
 	"github.com/LuanaFn/FDM-protocol/pkg/order"
+	"github.com/joho/godotenv"
 	"net/http"
+	"os"
 )
 
 func main() {
-	err := configs.Config.Load("")
+	err := godotenv.Load("configs/.env")
 	if err != nil {
-		log.Error.Panic(err)
+		log.Warning.Println("Error trying to load environment variables from .env file:", err)
 	}
-	log.Info.Printf("Running with config: %+v", configs.Config)
-	order.HandleRequests()
+
+	order.HandleRequests(os.Getenv("ORDERS_ENDPOINT"))
+
 	c := make(chan int)
+
 	go func() {
 		err := http.ListenAndServe(":8080", nil)
 		if err != nil {

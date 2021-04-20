@@ -5,8 +5,6 @@ import (
 	"github.com/LuanaFn/FDM-protocol/pkg/log"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/LuanaFn/FDM-protocol/configs"
 )
 
 var businessHost string
@@ -50,8 +48,8 @@ func handleError(msg string, w http.ResponseWriter) {
 HandleRequests register the handlers for the APIs in this package
 To expose the APIs you must run http.ListenAndServe after calling this
 */
-func HandleRequests() {
-	businessHost = configs.Config.Business.Endpoints["order"]
+func HandleRequests(host string) {
+	businessHost = host
 
 	http.HandleFunc("/orders", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {

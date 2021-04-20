@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fdm
+  labels:
+    app: fdm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fdm
+  template:
+    metadata:
+      labels:
+        app: fdm
+    spec:
+      containers:
+        - name: fdm
+          image: lurifn/fdm-protocol
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ORDERS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: fdm-configmap
+                  key: orders-endpoint
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fdm-service
+spec:
+  selector:
+    app: fdm
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

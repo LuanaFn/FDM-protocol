@@ -13,6 +13,10 @@ coverage.txt
 
 # configs
 configs/config.yml
+configs/.env
+configs/backend.env
+backend-secret.yaml
+backend-configmap.yaml
 
 # Test binary, build with `go test -c`
 *.test

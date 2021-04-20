@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fdm-backend
+  labels:
+    app: fdm-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fdm-backend
+  template:
+    metadata:
+      labels:
+        app: fdm-backend
+    spec:
+      containers:
+        - name: fdm-backend
+          image: lurifn/fdm-backend
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NOREPLY_EMAIL_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: noreply-email-address
+            - name: NOREPLY_EMAIL_PASSORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: noreply-email-password
+            - name: NOREPLY_EMAIL_SMTP
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: noreply-email-smtp
+            - name: NOREPLY_EMAIL_SMTP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: noreply-email-smtp-port
+            - name: BUSINESS_EMAIL_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: business-email-address
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fdm-backend-service
+spec:
+  selector:
+    app: fdm-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

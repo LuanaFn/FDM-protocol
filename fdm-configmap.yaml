@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fdm-configmap
+data:
+  orders-endpoint: fdm-backend-service/orders
