@@ -15,8 +15,6 @@ coverage.txt
 configs/config.yml
 configs/.env
 configs/backend.env
-backend-secret.yaml
-backend-configmap.yaml
 
 # Test binary, build with `go test -c`
 *.test
@@ -29,3 +27,12 @@ backend-configmap.yaml
 
 # IDE configs
 .idea
+
+# deploy
+deploy/.terraform
+deploy/.terraform.lock.hcl
+deploy/terraform.tfstate
+deploy/terraform.tfstate.backup
+deploy/backend-secret.yaml
+deploy/backend-configmap.yaml
+deploy/gke.tf

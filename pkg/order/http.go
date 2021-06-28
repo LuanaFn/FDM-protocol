@@ -2,7 +2,7 @@ package order
 
 import (
 	"fmt"
-	"github.com/LuanaFn/FDM-protocol/pkg/log"
+	"github.com/lurifn/fdm-protocol/pkg/log"
 	"io/ioutil"
 	"net/http"
 )
@@ -10,7 +10,7 @@ import (
 var businessHost string
 
 func create(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Post(businessHost, "application/json", nil)
+	resp, err := http.Post(businessHost, "application/json", r.Body)
 	if err != nil {
 		log.Error.Printf("error connecting to order service at %s for consumer %s: %+v", businessHost, r.Host, err)
 		handleError("error connecting to order service", w)
