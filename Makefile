@@ -1,13 +1,15 @@
-prepare:
-	go get ./...
+install:
+	go mod tidy
+	go get -u ./...
 
 lint:
-	yamllint configs
+	yamllint configs .github/workflows
 	golangci-lint run --fix --disable unused
+	gofmt -l -w -s .
+	golint ./...
 
 test:
-	cd pkg/order && godog
-	go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+	go test -v ./...
 
 build:
 	go build cmd/fdm/main.go
@@ -17,15 +19,18 @@ run:
 	rm main
 
 docker:
-	docker-compose down
-	docker-compose up --build
+	docker-compose -f deploy/docker-compose.yml down
+	docker-compose -f deploy/docker-compose.yml up --build
 
 local-deploy:
 	minikube start
-	kubectl apply -f backend-configmap.yaml
-	kubectl apply -f backend-secret.yaml
-	kubectl apply -f backend-deployment.yaml
-	kubectl apply -f fdm-configmap.yaml
-	kubectl apply -f fdm-deployment.yaml
+	kubectl apply -f deploy/backend-configmap.yaml
+	kubectl apply -f deploy/backend-secret.yaml
+	kubectl apply -f deploy/backend-deployment.yaml
+	kubectl apply -f deploy/fdm-configmap.yaml
+	kubectl apply -f deploy/fdm-deployment.yaml
 
-all: prepare lint test build run
+deploy:
+	cd deploy && terraform apply
+
+all: install lint test docker

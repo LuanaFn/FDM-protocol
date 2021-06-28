@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/LuanaFn/FDM-protocol/pkg/log"
-	"github.com/LuanaFn/FDM-protocol/pkg/order"
 	"github.com/joho/godotenv"
+	"github.com/lurifn/fdm-protocol/pkg/log"
+	"github.com/lurifn/fdm-protocol/pkg/order"
 	"net/http"
 	"os"
 )

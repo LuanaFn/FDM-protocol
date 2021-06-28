@@ -30,4 +30,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ github.repository }}:latest,${{ github.repository }}:${{ steps.branch_name.outputs.SOURCE_TAG }}
+          tags: |
+            ${{ github.repository }}:latest,
+            ${{ github.repository }}:${{ steps.branch_name.outputs.SOURCE_TAG }}
