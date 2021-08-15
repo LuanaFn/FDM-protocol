@@ -1,0 +1,114 @@
+openapi:  '3.0.0'
+info:
+  title: FDM - A federated decentralized marketplace protocol
+  description: |
+    A protocol for e-commerce marketplace that allows the stores to work in a federated way, 
+    decreasing the dependency on being part of acentral database to be easily discovered by 
+    potential clients as now different stores can communicate with each other and customer 
+    can communicate with different online shops.
+  version: '0.2.0'
+  contact:
+    name: Luana F Nascimento
+    url: https://github.com/lurifn
+    email: lurianfn@gmail.com
+  license:
+    name: GNU Affero General Public License v3.0
+    url: https://github.com/lurifn/fdm-backend/blob/main/LICENSE
+paths:
+  /order:
+    post:
+      summary: New order
+      description: Sends a new order request. Can be a real request or a test request to see what the answer would be.
+      requestBody:
+        description: Information about what could be interpreted as the shopping cart
+        required: true
+        content:
+          'application/json':
+            schema:
+              type: object
+              required:
+              - url
+              - products
+              properties:
+                url:
+                  type: string
+                  description: The URL where this product need to be sent using a POST request
+                mime_type_accepted:
+                  type: array
+                  description: A list with all the mime types accepted
+                  items:
+                    type: string
+                    enum:
+                    - url
+                    - text
+                    - pdf
+                    - markdown
+                    - html
+                    default: text
+                products:
+                  type: array
+                  description: List of all the products being requested
+                  items:
+                    required:
+                    - quantity
+                    - id
+                    properties:
+                      quantity:
+                        type: integer
+                        description: The desired amount of product units
+                      unit:
+                        type: string
+                        description: The unit type to apply on quantity field
+                        default: units
+                        enum:
+                        - units
+                        - kg
+                        - km
+                        - m
+                        - cm
+                        - g
+                        - lb
+                        - l
+                        - mi
+                        - yd
+                        - ft
+                        - in
+                        - hours
+                        - days
+                        - months
+                        - years
+                        - minutes
+                        - seconds
+                      id:
+                        type: string
+                        description: This field in combination with the URL will form a unique identification for this product
+                customer:
+                  type: object
+                  description: Information about the customer
+                  properties:
+                    email:
+                      type: string
+                details:
+                  type: string
+                  description: Details about the order that did not go in any of the other fields
+                process_order:
+                  type: boolean
+                  description: Informs if this is a real order that needs to be processed
+                  default: true
+                      
+            example:
+              url: "https://delivery.com/orders"
+              mime_type_accepted:
+              - text
+              - url
+              products:
+              - quantity: 10
+                unit: km
+                product_id: deliver
+              customer:
+                email: name@customer.com
+              details: "Deliver products: x, y, z from place 1 to place 2"
+              proc0ess_order: false
+      responses: 
+        200:
+          description: The order was succesfully sent
